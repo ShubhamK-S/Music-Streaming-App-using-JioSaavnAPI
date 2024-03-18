@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import MusicPlayer from './MusicPlayer';
+import './SearchBar.css'; // Import CSS file for styling
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
-  const handleSearch = async () => {
+  const searchTracks = async () => {
     try {
       const response = await axios.get(`https://ws.audioscrobbler.com/2.0/?method=track.search&track=${query}&api_key=31cca8c3df07098291eb6f8d56c88732&format=json`);
       setSearchResults(response.data.results.trackmatches.track);
@@ -14,28 +17,38 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
-  const handlePlayTrack = (trackUrl) => {
-    // Implement play functionality here
-    console.log('Playing track:', trackUrl);
+  const fetchTrackDetails = async (track) => {
+    try {
+      const response = await axios.get(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=31cca8c3df07098291eb6f8d56c88732&artist=${encodeURIComponent(track.artist)}&track=${encodeURIComponent(track.name)}&format=json`);
+      const trackUrl = response.data.track.url;
+      setSelectedTrack({ ...track, url: trackUrl });
+    } catch (error) {
+      console.error('Error fetching track details:', error);
+    }
+  };
+
+  const handlePlayTrack = (track) => {
+    fetchTrackDetails(track);
   };
 
   return (
-    <div>
+    <div className="search-container">
       <input
         type="text"
         placeholder="Search for songs..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <button onClick={handleSearch}>Search</button>
-      <h2>Search Results</h2>
-      <ul>
+      <button onClick={searchTracks}>Search</button>
+      <div className="search-results">
         {searchResults.map((track) => (
-          <li key={track.name}>
-            <a href="#" onClick={() => handlePlayTrack(track.url)}>{track.name} by {track.artist}</a>
-          </li>
+          <div className="track" key={track.name}>
+            <p>{track.name} by {track.artist}</p>
+            <button onClick={() => handlePlayTrack(track)}>Play</button>
+          </div>
         ))}
-      </ul>
+      </div>
+      {selectedTrack && <MusicPlayer trackUrl={selectedTrack.url} />}
     </div>
   );
 };
