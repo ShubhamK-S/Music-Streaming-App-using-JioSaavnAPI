@@ -26,7 +26,7 @@ This project is a web-based music streaming application built using React.js. It
 
 ## Screenshot
 
-![Webpage](pic.jpg)
+<img src="pic.jpg" alt="Webpage" width="400" height="auto">
 
 ## Contributing
 
