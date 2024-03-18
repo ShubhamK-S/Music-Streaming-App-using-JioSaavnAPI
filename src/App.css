@@ -1,0 +1,7 @@
+/* Define custom font styles */
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+.funky-font {
+  font-family: 'Indie Flower', cursive; /* Apply funky font family */
+  color: #023f80; /* Example color */
+}

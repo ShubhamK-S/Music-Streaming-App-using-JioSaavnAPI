@@ -20,8 +20,9 @@ const SearchBar = () => {
   const fetchTrackDetails = async (track) => {
     try {
       const response = await axios.get(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=31cca8c3df07098291eb6f8d56c88732&artist=${encodeURIComponent(track.artist)}&track=${encodeURIComponent(track.name)}&format=json`);
+      const { album } = response.data.track;
       const trackUrl = response.data.track.url;
-      setSelectedTrack({ ...track, url: trackUrl });
+      setSelectedTrack({ ...track, url: trackUrl, image: album.image[1]['#text'] });
     } catch (error) {
       console.error('Error fetching track details:', error);
     }
@@ -31,18 +32,26 @@ const SearchBar = () => {
     fetchTrackDetails(track);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault(); // Prevent page reload
+    searchTracks();
+  };
+
   return (
     <div className="search-container">
-      <input
-        type="text"
-        placeholder="Search for songs..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={searchTracks}>Search</button>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Search for songs..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
       <div className="search-results">
         {searchResults.map((track) => (
           <div className="track" key={track.name}>
+            <img src={track.image[1]['#text']} alt="Album Art" />
             <p>{track.name} by {track.artist}</p>
             <button onClick={() => handlePlayTrack(track)}>Play</button>
           </div>

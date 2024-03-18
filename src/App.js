@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from './components/SearchBar';
+import './App.css';
 
 const App = () => {
   const handlePlayTrack = (trackUrl) => {
@@ -9,7 +10,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Music Player</h1>
+      <h1 className="funky-font"><center>Music Player</center></h1>
       <SearchBar />
     </div>
   );
