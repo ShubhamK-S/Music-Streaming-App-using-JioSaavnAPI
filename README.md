@@ -24,6 +24,10 @@ This project is a web-based music streaming application built using React.js. It
 - Browse the search results and click the Play button next to a track to start playing it.
 - Enjoy listening to your favorite music tracks!
 
+## Screenshot
+
+![Webpage](pic.jpg)
+
 ## Contributing
 
 Contributions are welcome! If you find any bugs or have suggestions for new features, please open an issue or submit a pull request.
